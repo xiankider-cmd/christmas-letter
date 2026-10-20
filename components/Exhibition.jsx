@@ -39,6 +39,8 @@ export default function Exhibition({ space }) {
   const [progress, setProgress] = useState(0);
   const [played, setPlayed] = useState(() => new Set());
   const [width, setWidth] = useState(390);
+  const [insideSrc, setInsideSrc] = useState(null); // 안쪽 그림은 대문 그림이 다 온 뒤에 불러와요
+  const loadInside = () => setInsideSrc((v) => v || '/inside.webp');
   const audioRef = useRef(null);
 
   // 녹음 목록 미리 가져오기
@@ -58,6 +60,11 @@ export default function Exhibition({ space }) {
   }, [space.code]);
 
   useEffect(() => {
+    const t = setTimeout(loadInside, 2500); // 대문 그림이 늦어도 2.5초 뒤엔 불러와요
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
     const onResize = () => setWidth(window.innerWidth);
     onResize();
     window.addEventListener('resize', onResize);
@@ -66,6 +73,7 @@ export default function Exhibition({ space }) {
 
   function ringBell() {
     if (stage !== 'door') return;
+    loadInside();
     playDingDong();
     if (navigator.vibrate) navigator.vibrate([60, 120, 60]);
     // 휴대폰에서 소리가 나도록 미리 준비해 둬요
@@ -170,7 +178,7 @@ export default function Exhibition({ space }) {
       {/* 안쪽 (문이 열리면 보여요) */}
       <div className="inside-layer" style={{ position: 'absolute', inset: 0 }}>
         <div className="scene" style={open ? undefined : { animation: 'none' }}>
-          <img src="/inside.jpg" alt="크리스마스 장식이 가득한 집 안" />
+          {insideSrc && <img src={insideSrc} alt="크리스마스 장식이 가득한 집 안" decoding="async" />}
         </div>
       </div>
 
@@ -278,7 +286,7 @@ export default function Exhibition({ space }) {
       {stage !== 'inside' && (
         <div className={`door-layer ${open ? 'opening' : ''}`} style={{ position: 'absolute', inset: 0 }}>
           <div className="scene">
-            <img src="/door.jpg" alt="크리스마스 장식이 달린 빨간 대문" />
+            <img src="/door.webp" alt="크리스마스 장식이 달린 빨간 대문" fetchPriority="high" onLoad={loadInside} />
             <button className="bell" onClick={ringBell} aria-label="초인종 누르기" />
             <div className="bell-tip">🔔 초인종을 눌러 주세요!</div>
           </div>

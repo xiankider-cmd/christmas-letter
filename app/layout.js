@@ -32,12 +32,6 @@ export default function RootLayout({ children }) {
     <html lang="ko">
       <head>
         <link rel="preload" href="/kossu.woff2" as="font" type="font/woff2" crossOrigin="" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap"
-          rel="stylesheet"
-        />
       </head>
       <body>
         {children}
