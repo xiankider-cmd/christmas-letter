@@ -1,19 +1,34 @@
 'use client';
-// 🎁 전시관: 닫힌 대문 → 초인종 "딩동" → 문 안으로 → 선물상자 위에 아이 이름이 둥둥
+// 🎁 전시관: 닫힌 대문 → 초인종 "딩동" → 문 안으로 → 금빛 별과 트리 장식볼에 아이 이름이 둥둥
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Snow from './Snow';
 import { playDingDong } from '@/lib/client';
 import { bgmHold } from './Bgm';
 
-// 선물상자 색깔 짝꿍들 (상자색, 뚜껑색, 리본색)
-const PALETTES = [
-  { c1: '#c62a33', c2: '#e03a44', rib: '#f5cf6b' },
-  { c1: '#1f7a4d', c2: '#2b955f', rib: '#ffffff' },
-  { c1: '#f2e6cf', c2: '#ffffff', rib: '#c62a33' },
-  { c1: '#d9a933', c2: '#ecc155', rib: '#b3202a' },
-  { c1: '#a51e2c', c2: '#bf2a38', rib: '#1f7a4d' },
-  { c1: '#174d33', c2: '#21664a', rib: '#f5cf6b' },
-];
+// 장식볼 색깔: 하얀 진주색 / 노란 금색 (화려한 배경에서도 잘 보이게)
+const BALLS = ['ball-pearl', 'ball-gold'];
+
+// 금빛 별 그림
+function Star() {
+  return (
+    <svg className="star" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <radialGradient id="starGold" cx=".4" cy=".35">
+          <stop offset="0" stopColor="#fffdf0" />
+          <stop offset=".55" stopColor="#ffe27a" />
+          <stop offset="1" stopColor="#e2a62a" />
+        </radialGradient>
+      </defs>
+      <path
+        d="M50 4l13.5 29 31.5 3.6-23.5 21.5 6.6 31.2L50 73.6 21.9 89.3l6.6-31.2L5 36.6l31.5-3.6z"
+        fill="url(#starGold)"
+        stroke="#fff"
+        strokeWidth="3"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 // 같은 아이는 항상 같은 자리, 같은 색이 되도록 "정해진 랜덤"을 만들어요
 function seeded(str) {
@@ -113,14 +128,16 @@ export default function Exhibition({ space }) {
       const col = i % cols;
       const inRow = row === rows - 1 ? n - row * cols : cols; // 마지막 줄은 가운데로
       const offset = (cols - inRow) / 2;
-      const x = ((col + offset + 0.5 + (rnd() - 0.5) * 0.35) / cols) * 100;
+      // 화면 양쪽 끝에 잘리지 않게 가운데 72% 안에만 놓아요
+      const x = 14 + ((col + offset + 0.5 + (rnd() - 0.5) * 0.35) / cols) * 72;
       const y = ((row + 0.5 + (rnd() - 0.5) * 0.3) / rows) * 100;
       return {
         r,
         x,
         y,
-        pal: PALETTES[Math.floor(rnd() * PALETTES.length)],
-        box: 62 + Math.floor(rnd() * 16),
+        kind: i % 2 === 0 ? 'star' : 'ball', // 별과 장식볼을 번갈아 놓아요
+        ball: BALLS[Math.floor(rnd() * BALLS.length)],
+        size: 68 + Math.floor(rnd() * 12),
         dur: 5 + rnd() * 4,
         delay: -rnd() * 6,
       };
@@ -207,32 +224,36 @@ export default function Exhibition({ space }) {
 
           <div className="gifts" style={{ top: space.classes.length > 1 ? 118 : 70, bottom: 80 }}>
             <div className="gifts-inner" style={{ height: layout.rows * 150, minHeight: '100%' }}>
-              {layout.items.map(({ r, x, y, pal, box, dur, delay }) => (
+              {layout.items.map(({ r, x, y, kind, ball, size, dur, delay }) => (
                 <button
                   key={r.id}
-                  className={`gift ${playing && playing.id === r.id ? 'playing' : ''} ${played.has(r.id) ? 'played' : ''}`}
+                  className={`gift gift-${kind} ${playing && playing.id === r.id ? 'playing' : ''} ${played.has(r.id) ? 'played' : ''}`}
                   style={{
                     left: x + '%',
                     top: y + '%',
                     animationDuration: dur + 's',
                     animationDelay: delay + 's',
-                    '--c1': pal.c1,
-                    '--c2': pal.c2,
-                    '--rib': pal.rib,
-                    '--box': box + 'px',
+                    '--size': size + 'px',
                     '--tag-size': r.name.length > 4 ? '15px' : '18px',
+                    '--ball-font': r.name.length > 3 ? '14px' : '17px',
                   }}
                   onClick={() => play(r)}
                   aria-label={`${r.name}에게 온 편지 듣기`}
                 >
-                  <span className="tag">{r.name}</span>
-                  <span className="box">
-                    <span className="lid" />
-                    <span className="body" />
-                    <span className="rib-v" />
-                    <span className="bow" />
-                    <span className="shine" />
-                  </span>
+                  {kind === 'star' ? (
+                    <>
+                      <Star />
+                      <span className="tag">{r.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="hook" />
+                      <span className="cap" />
+                      <span className={`ball ${ball}`}>
+                        <span className="ball-name">{r.name}</span>
+                      </span>
+                    </>
+                  )}
                 </button>
               ))}
             </div>
@@ -253,7 +274,7 @@ export default function Exhibition({ space }) {
           {!recs && (
             <div className="empty">
               <div className="card">
-                {loadError ? <p>{loadError}</p> : <><div className="spinner" /><p>선물상자를 꺼내는 중…</p></>}
+                {loadError ? <p>{loadError}</p> : <><div className="spinner" /><p>별을 달고 있어요…</p></>}
               </div>
             </div>
           )}

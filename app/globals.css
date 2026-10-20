@@ -413,41 +413,59 @@ a { color: inherit; }
   border: 2.5px solid var(--gold);
   border-radius: 999px;
   padding: 4px 12px 3px;
-  margin-bottom: calc(var(--box, 70px) * .2);
+  margin-top: -8px;
   position: relative; z-index: 6;
   white-space: nowrap;
-  box-shadow: 0 0 10px rgba(255, 231, 163, .9);
+  box-shadow: 0 0 12px rgba(255, 248, 220, .95);
 }
-.box { position: relative; width: var(--box, 70px); height: calc(var(--box, 70px) * .78); }
-.box .lid {
-  position: absolute; left: -6%; right: -6%; top: 14%; height: 24%;
-  border-radius: 5px; background: var(--c2); z-index: 2;
-  box-shadow: inset 0 -3px 0 rgba(0,0,0,.15);
-  transition: transform .4s cubic-bezier(.3,1.6,.5,1);
+
+/* ⭐ 금빛 별 */
+.gift-star .star {
+  width: var(--size, 72px); height: var(--size, 72px);
+  filter: drop-shadow(0 0 8px #ffe9a0) drop-shadow(0 0 20px #fff3c4);
+  animation: twinkleStar 2.4s ease-in-out infinite;
+  transition: transform .35s cubic-bezier(.3,1.6,.5,1);
 }
-.box .body {
-  position: absolute; left: 0; right: 0; top: 34%; bottom: 0;
-  border-radius: 4px 4px 7px 7px; background: var(--c1);
-  box-shadow: inset 0 -6px 0 rgba(0,0,0,.12), inset 0 2px 0 rgba(255,255,255,.25);
+@keyframes twinkleStar {
+  0%,100% { filter: drop-shadow(0 0 6px #ffe9a0) drop-shadow(0 0 14px #fff3c4); }
+  50% { filter: drop-shadow(0 0 12px #fff6cf) drop-shadow(0 0 28px #fff8de); }
 }
-.box .rib-v { position: absolute; left: 42%; width: 16%; top: 14%; bottom: 0; background: var(--rib); z-index: 3; }
-.box .bow { position: absolute; left: 50%; top: 16%; width: 0; height: 0; z-index: 4; transition: transform .4s cubic-bezier(.3,1.6,.5,1); }
-.box .bow::before, .box .bow::after {
-  content: ''; position: absolute; width: calc(var(--box, 70px) * .3); height: calc(var(--box, 70px) * .2);
-  border: calc(var(--box, 70px) * .06) solid var(--rib); border-radius: 50%; top: calc(var(--box, 70px) * -.2);
+
+/* 🎄 트리 장식볼 (살랑살랑 흔들려요) */
+.gift-ball { animation-name: swing; transform-origin: 50% 0; }
+@keyframes swing {
+  0% { transform: translate(-50%, -50%) rotate(-7deg); }
+  50% { transform: translate(-50%, -50%) rotate(7deg); }
+  100% { transform: translate(-50%, -50%) rotate(-7deg); }
 }
-.box .bow::before { right: -2px; transform: rotate(-25deg); }
-.box .bow::after { left: -2px; transform: rotate(25deg); }
-.box .shine { position: absolute; left: 10%; top: 44%; width: 12%; height: 36%; background: rgba(255,255,255,.3); border-radius: 4px; z-index: 3; }
+.gift-ball .hook { width: 2px; height: 26px; background: linear-gradient(rgba(233,185,73,0), #e9b949); }
+.gift-ball .cap {
+  width: 20px; height: 11px; margin-bottom: -3px; position: relative; z-index: 2;
+  background: linear-gradient(#f8dd85, #b8892a); border-radius: 4px 4px 2px 2px;
+}
+.gift-ball .ball {
+  width: var(--size, 72px); height: var(--size, 72px); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; position: relative;
+  box-shadow: 0 0 16px rgba(255, 246, 210, .75), inset -7px -9px 14px rgba(170, 120, 30, .35);
+  transition: transform .35s cubic-bezier(.3,1.6,.5,1), box-shadow .35s;
+}
+.gift-ball .ball::before {
+  content: ''; position: absolute; left: 20%; top: 14%; width: 26%; height: 18%;
+  border-radius: 50%; background: rgba(255,255,255,.85); filter: blur(1px); transform: rotate(-30deg);
+}
+.ball-pearl { background: radial-gradient(circle at 35% 30%, #fff 0 14%, #fffaf0 34%, #f3e3b8 72%, #d8b766); }
+.ball-gold { background: radial-gradient(circle at 35% 30%, #fff 0 12%, #fff1b0 32%, #f2c94c 70%, #c9962c); }
+.ball-name {
+  position: relative; font-family: var(--font-title); font-size: var(--ball-font, 17px);
+  color: var(--red-deep); white-space: nowrap; text-shadow: 0 1px 0 rgba(255,255,255,.8);
+}
+
+/* 누르면: 반짝 커지고 흔들림을 멈춰요 */
 .gift.playing { animation-play-state: paused; }
-.gift.playing .lid, .gift.playing .bow { transform: translateY(-8px) rotate(-8deg); }
-.gift::before {
-  content: ''; position: absolute; left: 50%; bottom: 0; width: 120%; aspect-ratio: 1; transform: translate(-50%, 15%);
-  background: radial-gradient(circle, rgba(255, 226, 140, .55), transparent 65%); z-index: -1; pointer-events: none;
-}
-.gift.playing::before { background: radial-gradient(circle, rgba(255, 240, 190, .95), transparent 70%); }
+.gift-star.playing .star { transform: scale(1.25) rotate(12deg); animation-duration: .8s; }
+.gift-ball.playing .ball { transform: scale(1.18); box-shadow: 0 0 34px #fff8d8, 0 0 60px rgba(233,185,73,.8), inset -7px -9px 14px rgba(170,120,30,.35); }
 .gift.playing .tag { background: var(--gold-light); box-shadow: 0 0 24px #fff, 0 0 40px var(--gold); }
-.gift.played .tag::after { content: ' 💌'; font-size: .8em; }
+.gift-star.played .tag::after, .gift-ball.played .ball-name::after { content: ' 💌'; font-size: .75em; }
 
 .empty {
   position: absolute; left: 50%; top: 55%; transform: translate(-50%, -50%);
@@ -551,5 +569,5 @@ audio { width: 100%; margin: 6px 0 14px; }
 @keyframes bgmPulse { 0%,100% { box-shadow: 0 4px 14px rgba(0,0,0,.35), 0 0 0 0 rgba(233,185,73,.6); } 50% { box-shadow: 0 4px 14px rgba(0,0,0,.35), 0 0 0 8px rgba(233,185,73,0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .gift, .flake, .twinkle, .bell::before, .bell::after, .bell-tip { animation: none !important; }
+  .gift, .gift-star .star, .flake, .twinkle, .bell::before, .bell::after, .bell-tip { animation: none !important; }
 }
