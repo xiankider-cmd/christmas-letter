@@ -13,6 +13,13 @@
   --font-body: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
+/* 메인 제목 글꼴: 학교안심 꼬쑤염 (제목 글자만 담아 아주 가벼워요) */
+@font-face {
+  font-family: 'HakgyoansimKossuyeom';
+  src: url('/title-font.woff2') format('woff2');
+  font-display: swap;
+}
+
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; padding: 0; }
 body {
@@ -60,6 +67,13 @@ a { color: inherit; }
   word-break: keep-all;
 }
 .title .gold { color: var(--gold-light); }
+.main-title {
+  font-family: 'HakgyoansimKossuyeom', var(--font-title);
+  font-weight: normal;
+  font-size: 40px;
+  line-height: 1.25;
+  letter-spacing: 1px;
+}
 .subtitle {
   text-align: center;
   color: #ffeccc;

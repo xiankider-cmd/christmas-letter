@@ -85,10 +85,10 @@ export default function Home() {
       <div className="page-bg" />
       <Snow />
       <div className="wrap">
-        <h1 className="title">
-          🎄 크리스마스
+        <h1 className="title main-title">
+          메리크리스마스!
           <br />
-          <span className="gold">우리아이에게 편지보내기</span>
+          <span className="gold">자이안에 온 편지</span>
         </h1>
         <p className="subtitle">
           엄마 아빠의 목소리가 선물상자에 담겨
