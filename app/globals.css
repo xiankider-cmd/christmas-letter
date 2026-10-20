@@ -9,14 +9,14 @@
   --cream: #fff8ec;
   --ink: #3b1d12;
   --muted: #7b5a48;
-  --font-title: 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-body: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-title: 'HakgyoansimKossuyeom', 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'HakgyoansimKossuyeom', 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
-/* 메인 제목 글꼴: 학교안심 꼬쑤염 (제목 글자만 담아 아주 가벼워요) */
+/* 모든 화면 글꼴: 학교안심 꼬쑤염 (자주 쓰는 한글 2,350자만 담아 가볍게 만들었어요) */
 @font-face {
   font-family: 'HakgyoansimKossuyeom';
-  src: url('/title-font.woff2') format('woff2');
+  src: url('/kossu.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -30,6 +30,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 button, input, textarea { font: inherit; color: inherit; }
+h1, h2, h3, b, strong { font-weight: normal; }
 a { color: inherit; }
 
 /* ---------- 공통: 반짝이 배경 ---------- */
