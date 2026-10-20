@@ -1,5 +1,6 @@
 // 🖼️ 모든 화면의 "액자" — 글꼴, 카톡 미리보기 제목/사진을 정해요
 import './globals.css';
+import Bgm from '@/components/Bgm';
 
 const site = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
@@ -38,7 +39,10 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Bgm />
+      </body>
     </html>
   );
 }

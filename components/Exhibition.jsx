@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Snow from './Snow';
 import { playDingDong } from '@/lib/client';
+import { bgmHold } from './Bgm';
 
 // 선물상자 색깔 짝꿍들 (상자색, 뚜껑색, 리본색)
 const PALETTES = [
@@ -125,19 +126,25 @@ export default function Exhibition({ space }) {
     if (playing && playing.id === rec.id) {
       a.pause();
       setPlaying(null);
+      bgmHold(false);
       return;
     }
+    bgmHold(true); // 목소리가 잘 들리게 캐롤은 잠깐 쉬어요
     a.src = rec.url;
     a.currentTime = 0;
     setProgress(0);
     setPlaying(rec);
-    a.play().catch(() => setPlaying(null));
+    a.play().catch(() => {
+      setPlaying(null);
+      bgmHold(false);
+    });
     setPlayed((s) => new Set(s).add(rec.id));
   }
 
   function stop() {
     audioRef.current && audioRef.current.pause();
     setPlaying(null);
+    bgmHold(false);
   }
 
   const open = stage !== 'door';
@@ -155,6 +162,7 @@ export default function Exhibition({ space }) {
         onEnded={() => {
           setProgress(100);
           setTimeout(() => setPlaying(null), 500);
+          bgmHold(false);
         }}
         style={{ display: 'none' }}
       />

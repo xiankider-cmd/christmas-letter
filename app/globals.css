@@ -37,7 +37,7 @@ a { color: inherit; }
 .page {
   position: relative;
   min-height: 100dvh;
-  padding: 24px 16px 48px;
+  padding: 56px 16px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -333,7 +333,7 @@ a { color: inherit; }
   display: flex; flex-direction: column; align-items: center; pointer-events: none;
 }
 .door-ui > * { pointer-events: auto; }
-.door-top { top: max(18px, env(safe-area-inset-top)); }
+.door-top { top: max(18px, env(safe-area-inset-top)); padding: 0 60px; }
 .door-bottom { bottom: max(22px, env(safe-area-inset-bottom)); }
 .banner {
   background: linear-gradient(180deg, rgba(122, 20, 20, .92), rgba(90, 12, 12, .92));
@@ -535,6 +535,17 @@ audio { width: 100%; margin: 6px 0 14px; }
 .adm-row .del { background: #ffe8e6; color: #9c1b1b; font-family: var(--font-title); }
 .stat { text-align: center; font-size: 16px; color: var(--muted); margin-bottom: 4px; }
 .stat b { font-family: var(--font-title); font-size: 24px; color: var(--red); font-weight: normal; }
+
+/* ---------- 배경음악 버튼 ---------- */
+.bgm-btn {
+  position: fixed; right: 10px; top: max(10px, env(safe-area-inset-top)); z-index: 50;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--gold); background: rgba(255, 248, 236, .94);
+  font-size: 21px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+}
+.bgm-btn.on { animation: bgmPulse 1.6s ease-in-out infinite; }
+@keyframes bgmPulse { 0%,100% { box-shadow: 0 4px 14px rgba(0,0,0,.35), 0 0 0 0 rgba(233,185,73,.6); } 50% { box-shadow: 0 4px 14px rgba(0,0,0,.35), 0 0 0 8px rgba(233,185,73,0); } }
 
 @media (prefers-reduced-motion: reduce) {
   .gift, .flake, .twinkle, .bell::before, .bell::after, .bell-tip { animation: none !important; }

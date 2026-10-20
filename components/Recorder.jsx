@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Snow from './Snow';
 import { toSmallMp3 } from '@/lib/mp3';
 import { isKakaoInApp, openInExternalBrowser } from '@/lib/client';
+import { bgmHold } from './Bgm';
 
 const MAX_SEC = 60;
 
@@ -46,6 +47,12 @@ export default function Recorder({ space }) {
     return () => cleanup();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 녹음하고 다시 듣는 동안에는 캐롤이 녹음에 섞이지 않게 멈춰요
+  useEffect(() => {
+    bgmHold(step === 3 || step === 4);
+  }, [step]);
+  useEffect(() => () => bgmHold(false), []);
 
   function cleanup() {
     clearInterval(timerRef.current);
